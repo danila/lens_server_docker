@@ -21,7 +21,7 @@ docker-compose start db
 docker-compose start redis
 
 # setup database
-docker-compose run web rake db:create db:migrate
+docker-compose run web rake db:create db:schema:load
 
 # ensure all containers are up and running
 docker-compose up
