@@ -1,0 +1,27 @@
+# bin/docker-setup
+#!/bin/bash
+
+set -e
+
+# cp -f config/database.docker.yml config/database.yml
+# cp -f config/application.docker.yml config/application.yml
+git clone https://github.com/lenshq/lens_server.git || true
+cp -f Dockerfile lens_server/Dockerfile
+cp -f docker-compose.yml lens_server/docker-compose.yml
+cp -f database.docker.yml lens_server/config/database.yml
+cp -f lens_secret.docker.yml lens_server/config/lens_secret.yml
+cp -f sidekiq.rb lens_server/config/initializers/sidekiq.rb
+cd lens_server
+
+# build app image
+docker-compose build
+
+# start mysql and redis in background
+docker-compose start db
+docker-compose start redis
+
+# setup database
+docker-compose run web rake db:create db:migrate
+
+# ensure all containers are up and running
+docker-compose up
