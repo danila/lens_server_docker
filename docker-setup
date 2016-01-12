@@ -3,8 +3,7 @@
 
 set -e
 
-# cp -f config/database.docker.yml config/database.yml
-# cp -f config/application.docker.yml config/application.yml
+# necessary files manipulations
 git clone https://github.com/lenshq/lens_server.git || true
 cp -f Dockerfile lens_server/Dockerfile
 cp -f docker-compose.yml lens_server/docker-compose.yml
@@ -16,7 +15,7 @@ cd lens_server
 # build app image
 docker-compose build
 
-# start mysql and redis in background
+# start postgresql and redis in background
 docker-compose start db
 docker-compose start redis
 
